@@ -11,17 +11,23 @@ orkney.v$Longitude <- as.numeric(rev(orkney.v$Longitude))
 
 # converting seals output to dataframe
 sealsb <- as.data.frame(seals)
-sealsb$lon <- x2lon(sealsb$x)
-sealsb$lat <- y2lat(sealsb$y)
-
+sealsb$lon <- as.numeric(x2lon(sealsb$x))
+sealsb$lat <- as.numeric(y2lat(sealsb$y))
+sealsb$datetime <- seq(ISOdatetime(2017,05,30,0,0,0, tz = "UTC"), by = "2 hours", length.out = 50)
 
 # main plot
 seals.main <- ggplot(orkney.v, aes(x = Longitude,
                                    y = Latitude)) +
               geom_tile(data = orkney.v, aes(fill = as.factor(Value))) +
               scale_fill_manual(values = c("white", "red", "green", "grey")) +
-              geom_path(data = sealsb, aes(x = lon, y = lat)) +
-              guides(fill = F) +
+              geom_path(data = sealsb,
+                        aes(x = lon, y = lat, colour = as.numeric(datetime)),
+                        arrow = arrow(angle = 30,
+                                      length = unit(0.1, "cm"),
+                                      ends = "last", type = "open")) +
+              scale_colour_viridis(option = "C") +
+              theme_bw() +
+              theme(legend.position = "none") +
               coord_equal() +
               scale_x_continuous(expand = c(0,0)) +
               scale_y_continuous(expand = c(0,0))
