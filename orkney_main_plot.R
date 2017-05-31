@@ -50,8 +50,7 @@ seals.energy <- ggplot(seals.df, aes(x = datetime, y = energy)) +
 
 # activity plot
 seals.activity <- ggplot(seals.df, aes(x = datetime, y = activity)) +
-                  geom_point(colour = "blue") +
+                  geom_step(group = 1, colour = "blue") +
                   scale_x_datetime(expand = c(0,0)) +
-                  scale_y_discrete(expand = c(0.1,0.1),
-                                   break = c(as)) +
+                  scale_y_discrete(expand = c(0.1,0.1)) +
                   theme_bw()
