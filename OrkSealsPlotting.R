@@ -63,7 +63,7 @@ plot1 <- ggplot(orkney.df, aes(x = Longitude,
              shape = 72,
              size = 3) +
   theme(legend.position = "none") +
-  coord_cartesian() +
+  coord_equal() +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0))
 
@@ -82,14 +82,13 @@ plot3 <- ggplot(seals.df, aes(x = datetime, y = activity)) +
   theme_bw()
 
 # initialize PDF (you can adjust height and width in the pdf() call
-#pdf(file = sprintf("animal_%s.pdf", animals[i]),
- #   paper = "a4")
+pdf(file = sprintf("animal_%s.pdf", animals[i]),   paper = "a4")
 
 # print plots to device
 # note - increase nrow if you add more plots!
 print(gridExtra::grid.arrange(plot1, plot2, plot3,
                               nrow = 3,
-                              heights = c(3,1,1)))        
+                              heights = c(3,1,1)))
 
 # close device
 dev.off()
