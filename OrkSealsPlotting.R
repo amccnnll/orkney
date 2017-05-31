@@ -27,8 +27,8 @@ library(viridis)
 
 # PLOTTING
 
-# subset the data by animal ID
-animals = unique(sim$nIndivs)
+# set the number of animals the data by animal ID
+animals = unique(1:sim$nIndivs)
 
 # for loop to run through each animal ID and print plots
 for (i in 1:length(animals)) {
@@ -50,6 +50,8 @@ plot1 <- ggplot(orkney.df, aes(x = Longitude,
                           ends = "last", type = "open")) +
   scale_colour_viridis(option = "C") +
   theme_bw() +
+  ggtitle(paste("seal ID ", seals[[i]]$ID)) + 
+  theme(plot.title = element_text(lineheight=.8, face="bold")) +
   geom_point(data = patch,
              aes(x = x, y = y),
              shape = 24,
@@ -57,7 +59,7 @@ plot1 <- ggplot(orkney.df, aes(x = Longitude,
              fill = "red",
              size = 1) +
   geom_point(data = haul,
-             aes(x = V1, y =V2),
+             aes(x = X1, y =X2),
              shape = 72,
              size = 3) +
   theme(legend.position = "none") +
@@ -73,12 +75,22 @@ plot2 <- ggplot(seals.data, aes(x = datetime, y = energy)) +
   scale_y_continuous(expand = c(0,0))
 
 # plot 3
-plot3 = ggplot(...)
+plot3 <- ggplot(seals.df, aes(x = datetime, y = activity)) +
+  geom_step(group = 1, colour = "blue") +
+  scale_x_datetime(expand = c(0,0)) +
+  scale_y_discrete(expand = c(0.1,0.1)) +
+  theme_bw()
 
 # initialize PDF (you can adjust height and width in the pdf() call
-pdf(file = sprintf("animal_%s.pdf", animals[i]))
+#pdf(file = sprintf("animal_%s.pdf", animals[i]),
+ #   paper = "a4")
+
 # print plots to device
-print(gridExtra::arrange.grid(p1, p2, p3))        
+# note - increase nrow if you add more plots!
+print(gridExtra::grid.arrange(plot1, plot2, plot3,
+                              nrow = 3,
+                              heights = c(3,1,1)))        
+
 # close device
 dev.off()
 }
