@@ -27,15 +27,15 @@ library(viridis)
 
 # PLOTTING
 
-# set the number of animals the data by animal ID
-animals = unique(1:sim$nIndivs)
+# initialise the pdf
+pdf(file = "Seals output plots2.pdf",   paper = "a4")
 
 # for loop to run through each animal ID and print plots
-for (i in 1:length(animals)) {
-  seals.data = as.data.frame(seals[animals[i]])
+for (i in 1:sim$nIndivs) {
+  seals.data <- data.frame(seals[[i]])
   levels(seals.data$activity) <- sim$activityList
-  seals.data$lon <- as.numeric(x2lon(seals.df$x))
-  seals.data$lat <- as.numeric(y2lat(seals.df$y))
+  seals.data$lon <- as.numeric(x2lon(seals.data$x))
+  seals.data$lat <- as.numeric(y2lat(seals.data$y))
   seals.data$datetime <- sim$DT.seq
 
 # plot1
@@ -63,7 +63,7 @@ plot1 <- ggplot(orkney.df, aes(x = Longitude,
              shape = 72,
              size = 3) +
   theme(legend.position = "none") +
-  coord_equal() +
+  coord_fixed(ratio = 1) +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0))
 
@@ -81,15 +81,10 @@ plot3 <- ggplot(seals.df, aes(x = datetime, y = activity)) +
   scale_y_discrete(expand = c(0.1,0.1)) +
   theme_bw()
 
-# initialize PDF (you can adjust height and width in the pdf() call
-pdf(file = sprintf("animal_%s.pdf", animals[i]),   paper = "a4")
-
 # print plots to device
-# note - increase nrow if you add more plots!
 print(gridExtra::grid.arrange(plot1, plot2, plot3,
                               nrow = 3,
                               heights = c(3,1,1)))
-
+}
 # close device
 dev.off()
-}
