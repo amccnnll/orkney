@@ -15,14 +15,11 @@ food$Longitude <- as.numeric(rev(food$Longitude))
 
 # quiver plot
 p <-  ggplot(data = food, aes(x = Longitude, y = Latitude)) +
+  geom_point(size = 1, colour = "red") +
   geom_spoke(aes(angle = Value), radius = 0.01) +
   coord_equal() +
   theme_bw() +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0))
 
-dev.new(width = 10, height = 10)
-
 ggplotly(p)
-
-dev.off()
